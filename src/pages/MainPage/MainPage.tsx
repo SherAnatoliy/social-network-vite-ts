@@ -1,7 +1,10 @@
+import { Header } from "../../components/UI/Header/Header";
 import "./MainPage.scss";
 
 export const MainPage = () => {
   return (
+    <>
+    <Header/>
     <div className="MainPage">
       <aside className="LeftSide">
         <nav className="Navbar">
@@ -720,5 +723,6 @@ export const MainPage = () => {
         </div>
       </aside>
     </div>
+    </>
   );
 };
