@@ -1,6 +1,9 @@
+
+import { useTypedSelector } from "../../hooks/useTypeSelector";
 import "./ProfilePage.scss";
 
 export const ProfilePage = () => {
+  const user = useTypedSelector((store)=> store.userSlice.user)
   return (
     <div className="ProfilePage">
       <aside className="LeftSide">
@@ -249,7 +252,7 @@ export const ProfilePage = () => {
         <div className="user__block">
           <img src="./img/users/denis-frolov.jpeg" alt="Denis Frolov" />
           <div className="user__description">
-            <h1 className="user__name">Денис Фролов</h1>
+            <h1 className="user__name">{user?.name}</h1>
             <div className="user__info">
               <div className="parameter">
                 <span className="key">Друзья</span>

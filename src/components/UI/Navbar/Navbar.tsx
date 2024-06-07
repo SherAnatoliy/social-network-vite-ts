@@ -1,8 +1,10 @@
+import { SCNavbar } from "./Navbar.style"
 export const Navbar = () =>{
     return(
-    <>
-    <nav className="Navbar">
-          <ul className="navbar__list">
+    
+    <SCNavbar>
+<nav className="Navbar">
+<ul className="navbar__list">
             <li className="navbar__item">
               <svg
                 className="icon icon-profile"
@@ -159,6 +161,12 @@ export const Navbar = () =>{
             </li>
           </ul>
         </nav>
-    </>
+    </SCNavbar>
     )
 }
+
+
+
+  // <svg className={classname} viewBox={viewBox} fill="none" xmlns="http://www.w3.org/2000/svg"/>
+  // <path id={id} d={d}/>
+  // <svg p 

@@ -106,6 +106,7 @@ export const MainPage = () => {
     <>
   
     <Header/>
+ 
     <div className="MainPage">
       <aside className="LeftSide">
         <Navbar/>

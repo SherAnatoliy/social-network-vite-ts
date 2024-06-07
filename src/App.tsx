@@ -11,7 +11,7 @@ export const App = () => {
   },
 
   {
-    path:"/login-page",
+    path:"/main-page",
     element:<MainPage/>
   },
   {
@@ -19,7 +19,7 @@ export const App = () => {
     element:<RegPage/>
   },
   {
-    path:"/profile-page",
+    path:"/profil-page",
     element:<ProfilePage/>
   },
   ])

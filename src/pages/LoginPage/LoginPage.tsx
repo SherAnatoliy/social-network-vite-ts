@@ -6,10 +6,20 @@ import { AppRegistration } from "../../components/UI/AppRegistratoin/AppRegistra
 import { SCLoginPage } from "./LoginPage.style";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux"
+import { RootState } from "../../store/store";
+import { changeUser } from "../../store/userSlice";
 
+const mockUser = {
+    mail: "nvkl@gmail.com" ,
+    phone_number: +9989456456,
+    user_id: 1,
+    name: "Anatoliy",
+    reg_date: new Date().toISOString(),
+    city: "Pert",
+};
 
-export const LoginPage = () => {  
 const loginFormSchema = yup.object({
   useremail: yup
   .string()
@@ -20,17 +30,27 @@ const loginFormSchema = yup.object({
   .min(4, "Пароль должен содержать  как минимум 4 символа!")
   .required("Обязательное поле!"),
 });
-    const navigate = useNavigate()
+
+export const LoginPage = () => { 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const user = useSelector((state: RootState)=>state.userSlice.user);
+  console.log(user);
     interface ILoginForm {
-      useremail:string,
-      userpassword:string
+      useremail:string;
+      userpassword:string;
     }
-    const onLoginSubmit = (data:ILoginForm ) =>{
-      console.log(data);
-      if(data){
-        navigate("/login-page")
-      }
+    const onLoginSubmit = (data:ILoginForm ) =>{    
+      dispatch(changeUser(mockUser));
+       console.log(data);
+       if(data){
+         navigate("/profil-page");
+       }
     }
+
+    // const onLoginSubmit = ( ) =>{     
+    // dispatch(changeUser(mockUser))
+    //    }
     const {
        control, 
        handleSubmit,
@@ -80,7 +100,7 @@ const loginFormSchema = yup.object({
         <AppButton buttonText="Войти" buttonType="submit" isDisabled={false}/>
       </form>
       {/* <a href="#">Забыли пароль?</a> */}
-      <AppLink  linkText="undefined"/>
+      <AppLink  linkText="Забыли пароль"/>
      <AppRegistration/>
     </SCLoginPage>
   );
