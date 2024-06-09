@@ -5,38 +5,41 @@ import { SCRegPage } from "./RegPage.style";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRegisterUserMutation } from "../../store/Api/authApi";
+import { useEffect } from "react";
 
-
+const registrationFormSchema = yup.object({
+  useremail: yup
+  .string()
+  .email()
+  .required("Обазательное поле!"),
+  username: yup
+  .string()
+  .min(2, "Имя должно соблюдать минимум 2 символа")
+  .max(20, "Имя пользователя не должно превышать 20 символов")
+  .matches(/^[A-Za-zА-Яа-яЁё]+$/, "Имя может содержать только буквы")
+  .required("Обазательное поле!"),
+  userpassword: yup
+  .string()
+  .min(4, "Пароль должен содержать  как минимум 4 символа!")
+  .required("Обязательное поле!"),
+  phone_number: yup
+  .string()
+  .matches(/^\+\d{6,15}$/, "Некорректный номер телефона")
+  .required("Обязательное поле!"),
+  user_city: yup
+  .string()
+  .min(2, "Название города должно содержать минимум 2 символа!")
+  .max(40, "Название города не должно превышать 40 символов")
+  .matches(/^[A-Za-zА-Яа-яЁё\s-]+$/, "Город может содержать только буквы, тире и пробелы")
+  .required("Обязательное поле!"),
+  
+});
 export const RegPage = () => {
-  const registrationFormSchema = yup.object({
-    useremail: yup
-    .string()
-    .email()
-    .required("Обазательное поле!"),
-    username: yup
-    .string()
-    .min(2, "Имя должно соблюдать минимум 2 символа")
-    .max(20, "Имя пользователя не должно превышать 20 символов")
-    .matches(/^[A-Za-zА-Яа-яЁё]+$/, "Имя может содержать только буквы")
-    .required("Обазательное поле!"),
-    userpassword: yup
-    .string()
-    .min(4, "Пароль должен содержать  как минимум 4 символа!")
-    .required("Обязательное поле!"),
-    phone_number: yup
-    .string()
-    .matches(/^\+?[1-9]\d{1,14}$/, "Некорректный номер телефона")
-    .required("Обязательное поле!"),
-    user_city: yup
-    .string()
-    .min(2, "Название города должно содержать минимум 2 символа!")
-    .max(40, "Название города не должно превышать 40 символов")
-    .matches(/^[A-Za-zА-Яа-яЁё\s-]+$/, "Город может содержать только буквы, тире и пробелы")
-    .required("Обязательное поле!"),
-    
-  });
+
 
   const navigate = useNavigate()
+  const [ registerUser,{data:userData}] =  useRegisterUserMutation()
     interface IRegistrationForm {
       useremail:string,
         userpassword:string,
@@ -45,13 +48,14 @@ export const RegPage = () => {
         user_city:string,
     }
     const onRegistrationSubmit = (data:IRegistrationForm ) =>{
-      console.log(data);
-      if(data){
-        navigate("/")
-      }
+      registerUser({name:data.username,email:data.useremail,password:data.userpassword,phone_number:data.phone_number,user_city:data.user_city})
+      // console.log(data);
+      // if(data){
+      //   navigate("/")
+      // }
     }
 
-    const {
+    const { 
       control, 
       handleSubmit,
       formState: {errors},
@@ -62,9 +66,16 @@ export const RegPage = () => {
         phone_number:"",
         username:"",
         user_city:""
+
        },
        resolver:yupResolver(registrationFormSchema),
    });
+   useEffect(()=>{
+    if(userData?.user_id){
+     navigate("/")
+    }
+    console.log(userData)
+       },[userData,navigate])
   return (
     <SCRegPage className="RegPage">
       <h1>Регистрация</h1>

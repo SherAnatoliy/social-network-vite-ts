@@ -7,18 +7,20 @@ import { SCLoginPage } from "./LoginPage.style";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate} from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux"
-import { RootState } from "../../store/store";
-import { changeUser } from "../../store/userSlice";
+import { useLoginUserMutation } from "../../store/Api/authApi";
+import { useEffect } from "react";
 
-const mockUser = {
-    mail: "nvkl@gmail.com" ,
-    phone_number: +9989456456,
-    user_id: 1,
-    name: "Anatoliy",
-    reg_date: new Date().toISOString(),
-    city: "Pert",
-};
+
+
+
+// const mockUser = {
+//     mail: "nvkl@gmail.com" ,
+//     phone_number: +9989456456,
+//     user_id: 1,
+//     name: "Anatoliy",
+//     reg_date: new Date().toISOString(),
+//     city: "Pert",
+// };
 
 const loginFormSchema = yup.object({
   useremail: yup
@@ -33,19 +35,22 @@ const loginFormSchema = yup.object({
 
 export const LoginPage = () => { 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const user = useSelector((state: RootState)=>state.userSlice.user);
-  console.log(user);
+
+  const [loginUser,{data:userData}] = useLoginUserMutation()
+  // const dispatch = useDispatch()
+  // const user = useSelector((state: RootState)=>state.userSlice.user);
+  // console.log(user);
     interface ILoginForm {
       useremail:string;
       userpassword:string;
     }
     const onLoginSubmit = (data:ILoginForm ) =>{    
-      dispatch(changeUser(mockUser));
-       console.log(data);
-       if(data){
-         navigate("/profil-page");
-       }
+      loginUser({email:data.useremail,password:data.userpassword})
+      // dispatch(changeUser(mockUser));
+      //  console.log(data);
+      //  if(data){
+      //    navigate("/profil-page");
+      //  }
     }
 
     // const onLoginSubmit = ( ) =>{     
@@ -62,6 +67,12 @@ export const LoginPage = () => {
         },
         resolver:yupResolver(loginFormSchema),
     });
+    useEffect(()=>{
+     if(userData?.user_id){
+      navigate("/profil-page")
+     }
+     console.log(userData)
+        },[userData,navigate])
   return (
     
     <SCLoginPage className="LoginPage">
